@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-
 import Es6Promise from 'es6-promise'
 import echarts from 'echarts'
+
 Vue.prototype.$echarts = echarts
 
 Es6Promise.polyfill()
@@ -19,7 +19,14 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title || '机械师控制中心';
   console.log(to.name);
   store.commit("setTopList", []);
-  switch (to.name) {
+  var toName = to.name;
+  if (toName.indexOf("Side1") != -1) {
+    toName = 'Side1';
+  } else if (toName.indexOf("Side2") != -1) {
+    toName = 'Side2';
+  }
+
+  switch (toName) {
     case 'Index':
       store.commit("setTopList", [{
         name: '个人信息'
@@ -31,22 +38,57 @@ router.beforeEach((to, from, next) => {
         },
         {
           name: '个人设置',
-          routerName:'Login'
+          routerName: 'Login'
         },
       ]);
       break;
-      case 'SideHardware':
-        store.commit("setTopList", [{
-            name: '硬件监控'
-          },
-          {
-            name: '桌面监控',
-          },
-          {
-            name: '系统管理',
-          },
-        ]);
-        break;
+    case 'Setting':
+      store.commit("setTopList", [{
+        name: '设置',
+        padding: '55px'
+      }]);
+      break;
+    case 'Side1':
+      store.commit("setTopList", [{
+          name: '硬件监控',
+          routerName: 'Side1Hardware'
+        },
+        {
+          name: '桌面监控',
+          routerName: 'Side1Disktop'
+        },
+        {
+          name: '系统管理',
+          routerName: 'Side1Management'
+        },
+      ]);
+      break;
+    case 'Side2':
+      store.commit("setTopList", [{
+          name: '性能优化',
+          routerName: 'Side2Optimization'
+        },
+        {
+          name: '设置',
+          routerName: 'Side2Optetting',
+          padding: '50px'
+        }
+      ]);
+      break;
+    case 'Side4Driver':
+      store.commit("setTopList", [{
+          name: '官方驱动',
+        }
+
+      ]);
+      break;
+      case 'side5Hardcore':
+      store.commit("setTopList", [{
+          name: '硬核软件',
+        }
+
+      ]);
+      break;
 
     default:
       break;

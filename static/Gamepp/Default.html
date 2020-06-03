@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <base target="_blank">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/reset.css"/>
+    <link rel="stylesheet" href="./css/master.css"/>
+    <link rel="stylesheet" href="./css/layui.css" media="all">
+    <title>桌面皮肤-浮窗模式</title>
+    <style>
+        body::-webkit-scrollbar {
+            width: 0px;
+        }
+        .ColTitle {
+            font-weight: normal !important;
+        }
+
+        .ColText {
+            font-weight: normal !important;
+        }
+
+        body {
+            background-color: transparent
+        }
+
+        #scheduleX {
+            width: 95px;
+            float: left;
+            background: rgba(255, 0, 0, 0);
+        }
+
+        #scheduleX .xList {
+            width: 0%;
+            position: relative;
+            /*background-color: #ffca58;*/
+            background: linear-gradient(90deg, rgba(216, 132, 1, 1) 0%, rgba(240, 203, 72, 1) 100%);
+            margin: 1px 1px 1px 1px;
+            height: 6px;
+        }
+
+        #scheduleX .xList .xNum {
+            display: none;
+            color: #566676;
+        }
+
+        #scheduleX2 {
+            width: 95px;
+            float: left;
+            background: rgba(255, 0, 0, 0);
+        }
+
+        #scheduleX2 .xList2 {
+            width: 0%;
+            position: relative;
+            background-color: #ffca58;
+            margin: 1px 1px 1px 1px;
+            height: 6px;
+        }
+
+        #scheduleX2 .xList2 .xNum2 {
+            display: none;
+            color: #566676;
+        }
+
+        #scheduleX3 {
+            width: 95px;
+            float: left;
+            background: rgba(255, 0, 0, 0);
+        }
+
+        #scheduleX3 .xList3 {
+            width: 0%;
+            position: relative;
+            /*background-color: #ffca58;*/
+            background: linear-gradient(90deg, rgba(216, 132, 1, 1) 0%, rgba(240, 203, 72, 1) 100%);
+            margin: 1px 1px 1px 1px;
+            height: 6px;
+        }
+
+        #scheduleX3 .xList3 .xNum3 {
+            display: none;
+            color: #566676;
+        }
+
+        #OscheduleX4 {
+            border-color: #177bca
+        }
+
+        #scheduleX4 {
+            width: 95px;
+            float: left;
+            background: rgba(255, 0, 0, 0);
+        }
+
+        #scheduleX4 .xList4 {
+            width: 0%;
+            position: relative;
+            /*background-color: #177bca;*/
+            background: linear-gradient(-90deg, rgba(74, 156, 214, 1), rgba(23, 90, 225, 1));
+            margin: 1px 1px 1px 1px;
+            height: 6px;
+        }
+
+        #scheduleX4 .xList4 .xNum4 {
+            display: none;
+            color: #566676;
+        }
+
+        .many-G {
+            font-size: 12px;
+            color: #ffca58;
+            font-weight: bold;
+            float: left;
+            margin-top: -4px;
+            margin-left: 12px;
+        }
+
+        /*@font-face {*/
+        /*font-family: 'MyNewFont';   /!*字体名称*!/*/
+        /*src: url('../css/font.ttf');/!*字体源文件*!/*/
+        /*}*/
+        .DesktopSkinLoad {
+            position: absolute;
+            width: 312px;
+            height: 425px;
+            top: 0px;
+            background: #111;
+            opacity: 0.8;
+            z-index: 9
+        }
+
+        .spinner-box {
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+
+        .circle-border {
+            margin-top: 80px;
+            width: 60px;
+            height: 60px;
+            padding: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            /*background: rgb(63,249,220);*/
+            background: linear-gradient(40deg, rgba(245, 164, 48, 1) 0%, rgba(238, 202, 92, 0.1) 100%);
+            /*background: linear-gradient(0deg, rgba(63,249,220,0.1) 33%, rgba(63,249,220,1) 100%);*/
+            animation: spin .8s linear 0s infinite;
+        }
+
+        .circle-core {
+            width: 100%;
+            height: 100%;
+            background-color: #111;
+            border-radius: 50%;
+        }
+
+        .LoadDiv {
+            width: 100%;
+            height: 40px;
+            text-align: center;
+            margin-top: -50px;
+        }
+
+        .LoadMsg {
+            width: 138px;
+            height: 17px;
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .Skin-pattern-all {
+            visibility: hidden
+        }
+
+        .Skin-pattern-Memory {
+            visibility: hidden
+        }
+
+        .Skin-pattern-Network {
+            visibility: hidden
+        }
+
+        #BarrageBackground {position: absolute; width: 312px; top:0; /*height: 472px;*/height: 427px;z-index: 1;opacity: 1;}
+        .Occupy-title img {
+            float: left;
+            margin-top: 23px;
+        }
+    </style>
+</head>
+<body>
+<div id="Outermost" class="Desktop-Skin arrows" style="z-index: 999;">
+    <!--    <input id="OutermostI" style="width: 100%">-->
+    <div class="DesktopSkinLoad">
+        <div class="spinner-box">
+            <div class="circle-border">
+                <div class="circle-core"></div>
+            </div>
+        </div>
+        <div class="LoadDiv">
+            <span class="LoadMsg" set-lan="text:DesLoad"></span>
+        </div>
+    </div>
+    <div class="Skin-center">
+
+        <div class="dragLayer-locking" style="display: none">
+            <div class="dragLayer">
+                <div onclick="GPP_WinLock()" class="Lock-btn">
+                    <img src="./images/ic_lock.png" alt=""/>
+                    <span set-lan="text:barrage-lock">Lock</span>
+                </div>
+                <div class="drag">
+                    <img src="./images/img_drag.png" alt=""/>
+                    <p set-lan="text:CanDrag">Currently dragging</p>
+                </div>
+            </div>
+        </div>
+        <div id="titleswitch" class="Skin-pattern-header titleswitch">
+            <div class="Skin-pattern-gpp-logo"><img src="./images/logo_0.png" alt=""/></div>
+            <div class="Skin-pattern-address">gamepp.com</div>
+        </div>
+        <div class="Skin-pattern-all cpuswitch">
+            <div class="curve-head">
+                <ul>
+                    <li>
+                        <img src="./images/ic_cpu_y.png" class="ic_img skin_icon" alt=""/>
+                        <span class="curve-head-title ColTitle">CPU</span>
+                    </li>
+                    <li id="OCPU_power">
+                        <img src="./images/ic_power_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span id="CPU_power" class="ColText">0</span><span class="ColText">W</span>
+                    </li>
+                    <li id="OCPU_clock">
+                        <img src="./images/ic_frequency_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span id="CPU_clock" class="ColText">0</span><span class="ColText">MHz</span>
+                    </li>
+                    <li id="OCPU_fans">
+                        <img src="./images/ic_speed_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span id="CPU_fans" class="ColText"></span><span class="ColText">RPM</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram">
+                    <div id="placeholder"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span id="CPU_usage" class="Skin-all-num ColText"></span> <span
+                        class="Skin-all-icon ColText">%</span>
+                </div>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram">
+                    <div id="placeholder-two"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span id="CPU_temperature" class="Skin-all-num ColText"></span> <span class="Skin-all-icon ColText">℃</span>
+                </div>
+            </div>
+        </div>
+        <div class="Skin-pattern-all gpuswitch">
+            <div class="curve-head">
+                <ul>
+                    <li>
+                        <img src="./images/ic_gpu_y.png" class="ic_img skin_icon" style="margin-top: 3px;" alt=""/>
+                        <span class="curve-head-title ColTitle">GPU</span>
+                    </li>
+                    <li id="OGPU_power">
+                        <img src="./images/ic_power_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="GPU_power">0</span><span class="ColText">W</span>
+                    </li>
+                    <li id="OGPU_clock">
+                        <img src="./images/ic_frequency_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="GPU_clock">0</span><span class="ColText">MHz</span>
+                    </li>
+                    <li id="OGPU_fans">
+                        <img src="./images/ic_speed_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="GPU_fans">0</span><span class="ColText">RPM</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram">
+                    <div id="placeholder-three"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span class="Skin-all-num ColText" id="GPU_usage">0</span> <span
+                        class="Skin-all-icon ColText">%</span>
+                </div>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram">
+                    <div id="placeholder-four"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span class="Skin-all-num ColText" id="GPU_temperature"></span> <span class="Skin-all-icon ColText">℃</span>
+                </div>
+            </div>
+        </div>
+        <div class="Skin-pattern-Memory memoryswitch">
+            <div class="Occupy-title">
+                <img src="./images/ic_mem_y.png" class="skin_icon" alt=""/>
+                <span class="ColTitle" set-lan="text:memory1" style="width: 60px;">Memory</span>
+            </div>
+            <div class="Progress-bar Memory-bar">
+                <div class="bor-Memory">
+                    <div id="scheduleX"></div>
+                </div>
+                <div class="many-G ColText">
+                    <span id="memoryload"></span><span style="margin-left: 4px;margin-right: 4px;">/</span><span
+                        id="memorytotal"></span>
+                </div>
+            </div>
+            <div class=""></div>
+        </div>
+        <div class="Skin-pattern-Memory gpumemswitch">
+            <div class="Occupy-title">
+                <img src="./images/ic_gpumem_y.png" class="skin_icon" alt=""/>
+                <span class="ColTitle" set-lan="text:gpuram1" style="width: 72px;">GPU MEM</span>
+            </div>
+            <div class="Progress-bar MEM-bar">
+                <div id="OscheduleX2" class="bor-Memory">
+                    <div id="scheduleX2"></div>
+                </div>
+                <div class="many-G ColText" id="MemoryUsage">
+                    <span></span><span style="margin-left: 4px;margin-right: 4px;">/</span><span></span>
+                </div>
+            </div>
+        </div>
+        <div class="Skin-pattern-Network networkswitch">
+            <div class="Occupy-title2">
+                <img src="./images/ic_net_y.png" class="skin_icon" style="margin-right: 4px;" alt=""/>
+                <span class="ColTitle" set-lan="text:Network1">Network</span>
+            </div>
+            <div class="Occupy-title2">
+                <img src="./images/ic_download_y.png" class="down-up skin_icon" alt=""/>
+                <span class="ColText" id="download" style="margin-top: 16px;"></span>
+            </div>
+            <div class="Occupy-title2">
+                <img src="./images/ic_upload_y.png" class="down-up skin_icon" alt=""/>
+                <span class="ColText" id="upload" style="margin-top: 16px;"></span>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 20px" id="slideTest8" class="demo-slider"></div>
+
+</div>
+
+
+<!--/*默认*/-->
+<div id="OutermostDefault" class="Desktop-Skin2 arrows" style="display:none;position: relative">
+
+    <!--<input id="OutermostI">-->
+    <div class="DesktopSkinLoad">
+        <div class="spinner-box">
+            <div class="circle-border">
+                <div class="circle-core"></div>
+            </div>
+        </div>
+        <div class="LoadDiv">
+            <span class="LoadMsg" set-lan="text:DesLoad"></span>
+        </div>
+    </div>
+
+    <div class="Skin-center">
+        <div class="dragLayer-locking" style="display: none">
+            <div class="dragLayer">
+                <div onclick="GPP_WinLock()" class="Lock-btn">
+                    <img src="./images/ic_lock.png" alt=""/>
+                    <span set-lan="text:barrage-lock"></span>
+                </div>
+                <div class="drag">
+                    <img src="./images/img_drag.png" alt=""/>
+                    <p set-lan="text:CanDrag"></p>
+                </div>
+            </div>
+        </div>
+        <div id="titleswitch1" class="Skin-pattern-header Skin-pattern-header-back titleswitch">
+            <div class="Skin-pattern-gpp-logo">
+                <img src="./images/logo_0.png" alt=""/>
+            </div>
+            <div class="Skin-pattern-address">gamepp.com</div>
+        </div>
+        <div class="Skin-pattern-all Skin-pattern-all-back cpuswitch">
+            <div class="curve-head">
+                <ul>
+                    <li>
+                        <img src="./images/ic_cpu_y.png" class="ic_img skin_icon" alt=""/>
+                        <span class="curve-head-title ColTitle">CPU</span>
+                    </li>
+                    <li id="OCPU_power1">
+                        <img src="./images/ic_power_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="CPU_power1">0</span><span class="ColText">W</span>
+                    </li>
+                    <li id="OCPU_clock1">
+                        <img src="./images/ic_frequency_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="CPU_clock1">0</span><span class="ColText">MHz</span>
+                    </li>
+                    <li id="OCPU_fans1">
+                        <img src="./images/ic_speed_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="CPU_fans1"></span><span class="ColText">RPM</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram1">
+                    <div id="placeholder1"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span class="Skin-all-num ColText" id="CPU_usage1"></span> <span
+                        class="Skin-all-icon ColText">%</span>
+                </div>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram1">
+                    <div id="placeholder-two1"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span class="Skin-all-num ColText" id="CPU_temperature1"></span> <span
+                        class="Skin-all-icon ColText">℃</span>
+                </div>
+            </div>
+        </div>
+        <div class="Skin-pattern-all Skin-pattern-all-back2 gpuswitch">
+            <div class="curve-head">
+                <ul>
+                    <li>
+                        <img src="./images/ic_gpu_y.png" class="ic_img skin_icon" style="margin-top: 3px;" alt=""/>
+                        <span class="curve-head-title ColTitle">GPU</span>
+                    </li>
+                    <li id="OGPU_power1">
+                        <img src="./images/ic_power_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="GPU_power1">0</span><span class="ColText">W</span>
+                    </li>
+                    <li id="OGPU_clock1">
+                        <img src="./images/ic_frequency_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="GPU_clock1">0</span><span class="ColText">MHz</span>
+                    </li>
+                    <li id="OGPU_fans1">
+                        <img src="./images/ic_speed_y.png" class="ic_img move-down skin_icon" alt=""/>
+                        <span class="ColText" id="GPU_fans1">0</span><span class="ColText">RPM</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram1">
+                    <div id="placeholder-three1"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span class="Skin-all-num ColText" id="GPU_usage1">0</span> <span
+                        class="Skin-all-icon ColText">%</span>
+                </div>
+            </div>
+            <div class="CurveTrendChart">
+                <div class="container-diagram1">
+                    <div id="placeholder-four1"></div>
+                </div>
+                <div class="Skin-pattern-number">
+                    <span class="Skin-all-num ColText" id="GPU_temperature1"></span> <span
+                        class="Skin-all-icon ColText">℃</span>
+                </div>
+            </div>
+        </div>
+        <div class="Skin-pattern-Memory Skin-pattern-Memory-back memoryswitch">
+            <div class="Occupy-title">
+                <img src="./images/ic_mem_y.png" class="skin_icon" alt=""/>
+                <span class="ColTitle" set-lan="text:memory1" style="width: 60px;">Memory</span>
+            </div>
+            <div class="Progress-bar Memory-bar">
+                <div class="bor-Memory">
+                    <div id="scheduleX3"></div>
+                </div>
+                <div class="many-G ColText">
+                    <span id="memoryload1"></span><span style="margin-left: 4px;margin-right: 4px;">/</span><span
+                        id="memorytotal1"></span>
+                </div>
+            </div>
+            <div class=""></div>
+        </div>
+        <div class="Skin-pattern-Memory Skin-pattern-Memory-back2 gpumemswitch">
+            <div class="Occupy-title">
+                <img src="./images/ic_gpumem_y.png" class="skin_icon" alt=""/>
+                <span class="ColTitle" set-lan="text:gpuram1" style="width: 72px;">GPU MEM</span>
+            </div>
+            <div class="Progress-bar MEM-bar">
+                <div id="OscheduleX4" class="bor-Memory">
+                    <div id="scheduleX4"></div>
+                </div>
+                <div class="many-G ColText" id="MemoryUsage1">
+                    <span></span><span style="margin-left: 4px;margin-right: 4px;">/</span><span></span>
+                </div>
+            </div>
+        </div>
+        <div class="Skin-pattern-Network Skin-pattern-Network-back networkswitch">
+            <div class="Occupy-title2">
+                <img src="./images/ic_net_y.png" class="skin_icon" style="margin-right:4px;" alt=""/>
+                <span class="ColTitle" set-lan="text:Network1">Network</span>
+            </div>
+            <div class="Occupy-title2">
+                <img src="./images/ic_download_y.png" class="down-up skin_icon" alt=""/>
+                <span class="ColText" id="download1"></span>
+            </div>
+            <div class="Occupy-title2">
+                <img src="./images/ic_upload_y.png" class="down-up skin_icon" alt=""/>
+                <span class="ColText" id="upload1"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div id="BarrageBackground" class="background">-->
+<!--    <img id="BarrageBackground1" src="../images/DesktopSkin/Wallpaper/img_bg_plan6.png">-->
+<!--</div>-->
+
+
+<input id="language" value="EN" type="hidden" name="">
+<input id="background" value="0" type="hidden" name="">
+</body>
+<script type="text/javascript" src="./js/jquery-1.11.1.js"></script>
+<script src="./js/language.js"></script>
+<script src="./js/language_cn.js" charset="utf-8"></script>
+<script src="./js/language_en.js" charset="utf-8"></script>
+<script type="text/javascript" src="./js/jquery.flot.js"></script><!--曲线图-->
+<script src="./js/schedule.js"></script>
+<script src="./js/layui/layui.js"></script>
+<script src="./js/DesktopSkin-Default.js" charset="utf-8"></script>
+</html>

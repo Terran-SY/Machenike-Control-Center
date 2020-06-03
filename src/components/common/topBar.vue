@@ -1,6 +1,6 @@
 <template>
    <div class="topBar">
-            <img class="topmid" src="/static/img/topmid.png" />
+            <img class="topmid" src="../../../static/img/topmid.png" />
             <ul class="topmid topItemBox" v-show="topItems.length">
                 <li class="topItem" v-for="item,index in topItems"  @click="itemClick(index,item)"  :class="index==activeIndex?'topItemActive':''">{{item.name}}</li>
             </ul>
@@ -24,10 +24,10 @@
                     </div>
 
                 </li>
-                <li class="topRbtn">
+                <li class="topRbtn" @click="minimize">
                     \<img class="minimize" src="~@/assets/img/topbar/minimize.png" />
                 </li>
-                <li class="topRbtn">
+                <li class="topRbtn" @click="closed">
                     \<img class="close" src="~@/assets/img/topbar/close.png" />
                 </li>
             </ul>
@@ -84,10 +84,8 @@ export default {
          {
           name: "退出",
           icon: SetIcon5b,
-          activeIcon: SetIcon5w,
-          routeName: "SideHardware"
+          activeIcon: SetIcon5w
         },
-        
       ]
     }
   },
@@ -108,8 +106,18 @@ export default {
           }
       },
       setItemClick(item){
-           this.$router.push({ name: item.routeName});
-           sessionStorage.removeItem('activeIndex');
+          if(item.name == '退出') {
+              window.CallNativeSync('{"func":"GPP_ExitApp"}')
+          } else {
+              this.$router.push({ name: item.routeName});
+              sessionStorage.removeItem('activeIndex');
+          }
+      },
+      minimize() {
+          window.CallNativeSync('{"func":"GPP_OnMinimize"}');
+      },
+      closed() {
+          window.CallNativeSync('{"func":"GPP_ExitApp"}')
       }
   }
 }
@@ -121,6 +129,7 @@ export default {
     height: 50px;
     width: 100%;
     position: relative;
+    -webkit-app-region: drag;
     /* overflow: hidden; */
 }
 .topBar img{
@@ -211,6 +220,7 @@ export default {
     position: absolute;
     left: -20px;
     top:36px;
+    z-index 1000;
 }
 .settingCon{
     width: 100%;

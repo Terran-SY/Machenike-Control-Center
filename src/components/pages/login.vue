@@ -3,7 +3,11 @@
     <div class="loginContant">
       <img class="logo" src="~@/assets/img/login/logo.png" />
       <div class="loginTip">登录您的MACHENIKE账号</div>
-      <img class="loginByWechat" @click="shoWechatLogin = true;" src="~@/assets/img/login/wechat.png" />
+      <img
+        class="loginByWechat"
+        @click="shoWechatLogin = true;"
+        src="~@/assets/img/login/wechat.png"
+      />
       <div class="loginItem">
         <img class="orline orline1" src="~@/assets/img/login/orline.png" />
         <img class="orline orline2" src="~@/assets/img/login/orline.png" />
@@ -11,64 +15,110 @@
       </div>
       <div class="loginItem loginItem2">
         <div class="tip">邮箱</div>
-        <input class="loginInp" type="text" name="email" />
+        <input class="loginInp" type="text" name="email"  v-model="loginTest.username"/>
       </div>
       <div class="loginItem loginItem2">
         <div class="tip">密码</div>
-        <input class="loginInp password" :type="intType" name="password" />
+        <input class="loginInp password" :type="intType" name="password" v-model="loginTest.password" />
         <img class="hiddenPwd" @click="changePwd" src="~@/assets/img/login/hiddenPwd.png" />
       </div>
       <div class="loginItem loginItem2">
         <div class="tip">验证码</div>
-        <input class="loginInp testCode" type="text" name="testCode" />
-        <div class="testCodeArea">9527</div>
+        <input class="loginInp testCode" type="text" name="testCode"  v-model="error"/>
+        <div class="testCodeArea" @click="getImg"><img :src="imgSrc"/></div>
       </div>
-      <div class="goBtn" @click="$router.push({ name: 'Index'});">登录</div>
+      <div class="goBtn" @click="login">登录</div>
       <div class="elseBox">
         <div class="forgetPwd">忘记密码?</div>
         <div class="tip">你已经拥有账户了吗？</div>
-        <div class="register">注册</div>
+        <div class="register" @click="$router.push({ name: 'Register'});">注册</div>
       </div>
     </div>
-     <div class="loginMask" v-show="shoWechatLogin">
-            <div class="loginINwechat">
-                <div class="titBar">
-                    <img  @click="shoWechatLogin = false;" class="close2" src="~@/assets/img/login/close.png" />
-                </div>
-                <div class="maskTips">Log In To WeChat</div>
-                <img class="ercode" src="~@/assets/img/login/ercode.png" />
-                <div class="maskTips2">Scan QR Code in WeChat to log in<br>"Machenike"</div>
-
-            </div>
+    <div class="loginMask" v-show="shoWechatLogin">
+      <div class="loginINwechat">
+        <div class="titBar">
+          <img @click="shoWechatLogin = false;" class="close2" src="~@/assets/img/login/close.png" />
         </div>
+        <div class="maskTips">Log In To WeChat</div>
+        <img class="ercode" src="~@/assets/img/login/ercode.png" />
+        <div class="maskTips2">
+          Scan QR Code in WeChat to log in
+          <br />"Machenike"
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import {encryptSign} from '../../axios/axios'
+import {encryptMD5} from '../../axios/axios'
+import {sort_asc} from '../../axios/axios'
+import Axios from 'axios'
 export default {
   name: "",
   data() {
     return {
       msg: "",
-      shoWechatLogin:false,
-      intType:'password'
+      shoWechatLogin: false,
+      intType: "password",
+      imgSrc: '',
+      loginTest: {
+        username: '',
+        password: ''
+      },
+      error: '123'
     };
   },
   mounted() {
     var that = this;
+    this.getImg()
   },
   methods: {
-    changePwd (){
-      var that =this;
-      if(that.intType == 'password'){
-         that.intType='text';
-      }else{
-         that.intType='password';
+    changePwd() {
+      var that = this;
+      if (that.intType == "password") {
+        that.intType = "text";
+      } else {
+        that.intType = "password";
       }
-     
     },
-    linkTo (name){
+    linkTo(name) {
       this.$router.push({ name: "Index" });
+    },
+    login() {
+      try {
+        console.log(document.cookie)
+        let str1 = sort_asc(this.loginTest)
+        console.log(str1)
+        let str2 = encryptSign(str1)
+        console.log(str2)
+        let str3 = encryptMD5(str2)
+        console.log(str3)
+        Axios.get('https://www.machenike.com/api.php/login', {
+        credentials:true,
+        params: {
+            username: this.loginTest.username,
+            password: this.loginTest.password,
+            sign: str3
+        },
+        timeout: 1000
+    })
+      } catch(err) {
+        this.error = err
+      }
+    },
+    getImg() {
+      Axios.get('https://www.machenike.com/captcha', {
+        credentials: false,
+        params: {
+          Cookie: '123'
+        },
+        timeout: 1000
+      }).then (res => {
+        console.log(res)
+      })
+      console.log('1')
     }
   }
 };

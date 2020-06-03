@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/reset.css"/>
+    <link rel="stylesheet" href="./css/master.css"/>
+    <title>桌面皮肤-浮窗模式</title>
+    <style>
+        body::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        body {
+            margin-left: 0;
+            margin-top: 0;
+            margin-right: 0;
+            margin-bottom: 0;
+            overflow: hidden;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <iframe name="DSMonitor" id="DSMonitor" src='' width='' height='' frameborder='0'></iframe>
+</div>
+<input hidden id="DSMonitorVal" value="">
+</body>
+
+<script type="text/javascript" src="./js/jquery-1.11.1.js"></script>
+
+
+<script type="text/javascript">
+    // window.CallNative('SetWindowSize', 500, 800, 10);
+    // var str = '{"background":"../img/DesktopSkin/Wallpaper/img_bg_style16.png","cpu":[{"clock":3650,"fans":0,"power":30,"temperature":49,"usage":31}],"cpuswitch":1,"download":2,"gpu":[{"MemoryClock":1750,"MemorySize":4096,"MemoryUsage":"492M/4096M","MemoryUsed":492,"clock":321,"fans":0,"power":0,"shadres":2048,"temperature":52,"usage":0}],"gpumemswitch":1,"gpuswitch":1,"language":"CN","lock":0,"memoryload":45,"memoryswitch":1,"memorytotal":16336,"networkswitch":1,"titleswitch":0,"type":3,"upload":4}';
+    // WP_ReLoadConfig(str);
+    function WP_ReLoadConfig(str) {
+        // $('#OutermostI').val(str);
+        var data_arr = $.parseJSON(str);
+        // console.log(data_arr);style1
+        if ($('#DSMonitorVal').val() != data_arr.type) {
+            $('#DSMonitorVal').val(data_arr.type);
+            switch (data_arr.type) {
+                case 1:
+                    window.CallNative('SetWindowSize', 314, 445, 10);
+                    $('#DSMonitor').attr('width', '314px').attr('height', '445px');
+                    src = 'Default.html';
+                    break;
+                case 2:
+                    window.CallNative('SetWindowSize', 850, 44, 10);
+                    $('#DSMonitor').attr('width', '850px').attr('height', '44px');
+                    src = 'Simple.html';
+                    break;
+                case 3:
+                    window.CallNative('SetWindowSize', 314, 425, 10);
+                    $('#DSMonitor').attr('width', '314px').attr('height', '425px');
+                    src = 'Evaluation.html';
+                    break;
+            }
+            $('#DSMonitor').attr('src', src);
+        }
+        window.frames["DSMonitor"].DS_LoadConfig_Child(str);
+    }
+
+    function WP_SetLockState(value) {
+        window.frames["DSMonitor"].WP_SetLockState_Child(value);
+    }
+
+</script>
+</html>

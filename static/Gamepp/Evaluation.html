@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <base target="_blank">
+    <meta charset="UTF-8">
+    <title>GPPInGame</title>
+    <link rel="stylesheet" href="./css/reset.css"/>
+    <link rel="stylesheet" href="./css/master.css"/>
+    <link rel="stylesheet" href="./css/layui.css" media="all">
+    <link rel="stylesheet" href="./css/progresscircle.css"/>
+    <style>
+        body {
+            background-color: transparent
+        }
+
+        body::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .circleChart_text {
+            color: #D8D9D9;
+            font-size: 14px;
+        }
+
+        .data-left .Load {
+            position: relative;
+            right: 0;
+            left: 56px;
+            top: -8px;
+            font-size: 14px;
+            color: #D8D9D9;
+        }
+
+        .xNum {
+            display: none
+        }
+
+        .DesktopSkinLoad {
+            position: absolute;
+            width: 312px;
+            height: 425px;
+            top: 0px;
+            background: #111;
+            opacity: 0.8;
+            z-index: 9
+        }
+
+        .spinner-box {
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+
+        .circle-border {
+            margin-top: 80px;
+            width: 60px;
+            height: 60px;
+            padding: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            /*background: rgb(63,249,220);*/
+            background: linear-gradient(40deg, rgba(245, 164, 48, 1) 0%, rgba(238, 202, 92, 0.1) 100%);
+            /*background: linear-gradient(0deg, rgba(63,249,220,0.1) 33%, rgba(63,249,220,1) 100%);*/
+            animation: spin .8s linear 0s infinite;
+        }
+
+        .circle-core {
+            width: 100%;
+            height: 100%;
+            background-color: #111;
+            border-radius: 50%;
+        }
+
+        .LoadDiv {
+            width: 100%;
+            height: 40px;
+            text-align: center;
+            margin-top: -50px;
+        }
+
+        .LoadMsg {
+            width: 138px;
+            height: 17px;
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .desktop-cpu-g {
+            visibility: hidden
+        }
+
+        .desktop-gpu-g {
+            visibility: hidden
+        }
+
+        .desktop-pattern {
+            visibility: hidden
+        }
+
+        .layui-progress {
+            width: 154px;
+            background-color: #3b3b3b;
+            height: 8px;
+            border-radius: 2px;
+        }
+
+        .layui-progress-bar {
+            height: 8px;
+            border-radius: 2px;
+            background-color: #0089e9
+        }
+
+        .layui-yellow {
+            background-color: #fbac14
+        }
+
+        .circle-chart {
+            transform: rotate(180deg);
+            width: 74px;
+            height: 74px;
+        }
+
+        .circlechart .circle-chart__circle {
+            stroke: #0089e9 !important;
+            stroke-width: 2;
+        }
+
+
+        .circlechart2 .circle-chart__circle {
+            stroke: #fbac14 !important;
+            stroke-width: 2;
+        }
+
+        .circle-chart__background {
+            stroke: rgb(59, 59, 59);
+            stroke-width: 2px;
+        }
+
+        .percentage_str {
+            font-size: 14px;
+            margin-top: -50px;
+            width: 74px;
+            height: 74px;
+            text-align: center;
+            color: #D8D9D9;
+        }
+        .skin_icon{margin-top: 8px!important;}
+    </style>
+</head>
+<body>
+<div id="Outermost" class="Desktop-center Desktop-Skin arrows">
+<!--        <input id="OutermostI" style="width: 100%">-->
+    <div class="DesktopSkinLoad">
+        <div class="spinner-box">
+            <div class="circle-border">
+                <div class="circle-core"></div>
+            </div>
+        </div>
+        <div class="LoadDiv">
+            <span class="LoadMsg" set-lan="text:DesLoad"></span>
+        </div>
+    </div>
+
+    <div class="dragLayer-locking" style="display: none">
+        <div class="dragLayer1">
+            <div onclick="GPP_WinLock()" class="Lock-btn">
+                <img src="./images/ic_lock.png" alt=""/>
+                <span set-lan="text:barrage-lock">Lock</span>
+            </div>
+            <div class="drag">
+                <img src="./images/img_drag.png" alt=""/>
+                <p set-lan="text:CanDrag">Currently dragging</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="desktop-cpu-g cpuswitch">
+        <div class="desktop-title">
+            <img src="./images/img_desktop_cpu_b.png" alt=""/>
+            <span>CPU</span>
+        </div>
+        <div class="desktop-data">
+            <div class="data-left">
+                <div class="circlechart" data-percentage="" data-unit="%"></div>
+                <!--                <div class="circleChart" id="1" data-value=""></div>-->
+                <!--                <p class="Load" set-lan="text:occupancy1">Load</p>-->
+            </div>
+            <div class="data-right">
+                <div class="Progress">
+                    <!--                    <div id="scheduleX"></div>-->
+
+                    <div class="layui-progress" lay-filter="cpu_temperature">
+                        <div class="layui-progress-bar" lay-percent=""></div>
+                    </div>
+
+                    <div class="schedule-CPU"><span set-lan="text:temperature1">Temp</span><span class="FR"><em id="cpu_temperature"></em><em> ℃</em></span></div>
+                </div>
+                <div class="Progress">
+                    <!--                    <div id="scheduleX2"></div>-->
+                    <div class="layui-progress" lay-filter="cpu_clock">
+                        <div class="layui-progress-bar" lay-percent=""></div>
+                    </div>
+                    <div class="schedule-CPU"><span set-lan="text:frequency1">Frequency</span><span class="FR"><em id="cpu_clock"></em><em> MHz</em></span></div>
+                </div>
+                <div class="Progress">
+                    <!--                    <div id="scheduleX3"></div>-->
+                    <div class="layui-progress" lay-filter="cpu_power">
+                        <div class="layui-progress-bar" lay-percent=""></div>
+                    </div>
+                    <div class="schedule-CPU"><span set-lan="text:power3">Power</span><span class="FR"><em id="cpu_power"></em><em> W</em></span></div>
+                </div>
+            </div>
+        </div>
+        <!--        <div class="Proportion">-->
+        <!--            <div class="Proportion-color blue-color"></div>-->
+        <!--            <p>Gamepp.exe</p>-->
+        <!--            <span>10<em>%</em></span>-->
+        <!--        </div>-->
+    </div>
+    <div class="desktop-gpu-g gpuswitch">
+        <div class="desktop-title">
+            <img src="./images/img_desktop_gpu_b.png" alt=""/>
+            <span set-lan="text:gpu">GPU</span>
+        </div>
+        <div class="desktop-data">
+            <div class="data-left">
+                <div class="circlechart2" data-percentage="80" data-unit="%"></div>
+                <!--                <div class="circleChart" id="2" data-value=""></div>-->
+                <!--                <p class="Load" set-lan="text:occupancy1">Load</p>-->
+                <!--<div class="circlechart" data-percentage="50">50%</div>-->
+            </div>
+            <div class="data-right">
+                <div class="Progress">
+                    <!--                    <div id="scheduleX4"></div>-->
+
+                    <div class="layui-progress" lay-filter="gpu_temperature">
+                        <div class="layui-progress-bar layui-yellow" lay-percent=""></div>
+                    </div>
+
+                    <div class="schedule-CPU"><span set-lan="text:temperature1">Temp</span><span class="FR"><em id="gpu_temperature"></em><em> ℃</em></span></div>
+                </div>
+                <div class="Progress">
+                    <!--                    <div id="scheduleX5"></div>-->
+                    <div class="layui-progress" lay-filter="gpu_clock">
+                        <div class="layui-progress-bar layui-yellow" lay-percent=""></div>
+                    </div>
+                    <div class="schedule-CPU"><span set-lan="text:frequency1">Frequency</span><span class="FR"><em id="gpu_clock"></em><em> MHz</em></span></div>
+                </div>
+                <div class="Progress">
+                    <!--                    <div class="scheduleX6"></div>-->
+                    <div class="layui-progress" lay-filter="gpu_power">
+                        <div class="layui-progress-bar layui-yellow" lay-percent=""></div>
+                    </div>
+                    <div class="schedule-CPU"><span set-lan="text:power3">Power</span><span class="FR"><em id="gpu_power">90</em><em> W</em></span></div>
+                </div>
+            </div>
+        </div>
+        <!--        <div class="Proportion">-->
+        <!--            <div class="Proportion-color yellow"></div>-->
+        <!--            <p>Gamepp.exe</p>-->
+        <!--            <span>10<em>%</em></span>-->
+        <!--        </div>-->
+    </div>
+    <div class="desktop-pattern memoryswitch">
+        <div class="desktop-Occupy-title">
+            <img src="./images/img_desktop_mem_b.png" class="skin_icon" alt="">
+            <span class="ColTitle" set-lan="text:memory1">Memory</span>
+        </div>
+        <div class="Progress g2">
+            <!--            <div id="scheduleX7" style="margin-top: 16px;"></div>-->
+            <div style="margin-top: 16px;" class="layui-progress" lay-filter="memoryload">
+                <div class="layui-progress-bar" lay-percent=""></div>
+            </div>
+            <div class="many-G ColText">
+                <span id="memoryload1"></span><span>/</span><span id="memorytotal1"></span>
+            </div>
+        </div>
+    </div>
+    <div class="desktop-pattern gpumemswitch">
+        <div class="desktop-Occupy-title">
+            <img src="./images/img_desktop_ram_b.png" class="skin_icon" alt="">
+            <span class="ColTitle" set-lan="text:gpuram1">GPU MEM</span>
+        </div>
+        <div class="Progress g2">
+            <!--            <div id="scheduleX8" style="margin-top: 16px;"></div>-->
+            <div style="margin-top: 16px;" class="layui-progress" lay-filter="gpumemload">
+                <div class="layui-progress-bar layui-yellow" lay-percent=""></div>
+            </div>
+            <div class="many-G ColText" id="MemoryUsage1">
+                <span></span><span>/</span><span></span>
+            </div>
+        </div>
+    </div>
+    <div class="desktop-pattern networkswitch">
+        <div class="desktop-Occupy-title">
+            <img src="./images/img_desktop_notwork_b.png" class="skin_icon" style="margin-top: 6px;" alt="">
+            <span class="ColTitle" set-lan="text:Network1" style="width: 50px;">Network</span>
+        </div>
+        <div class="Occupy-title-d desktop-download">
+            <span class="ColText" id="download"></span>
+            <img src="./images/img_desktop_down_a.png" class="down-up skin_icon" style="margin-left: 4px;" alt="">
+        </div>
+        <div class="Occupy-title-d desktop-download">
+            <span class="ColText" id="upload"></span>
+            <img src="./images/img_desktop_up_a.png" class="down-up skin_icon" style="margin-left: 4px;" alt="">
+        </div>
+    </div>
+
+</div>
+<input id="language" value="EN" type="hidden" name="">
+<input id="background" value="0" type="hidden" name="">
+</body>
+<script src="./js/jquery-1.11.1.js"></script>
+<script src="./js/language.js"></script>
+<script src="./js/language_cn.js" charset="utf-8"></script>
+<script src="./js/language_en.js" charset="utf-8"></script>
+<script src="./js/progresscircle.js"></script>
+<script src="./js/layui/layui.js"></script>
+<script>
+    var CPUMaxPower = 0;
+    var GPUMaxPower = 0;
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    $('.circlechart').circlechart();
+    $('.circlechart2').circlechart();
+
+
+    // setInterval(() => {
+    //     $('.circlechart').data('percentage', $('.circlechart').data('percentage') + 10);        // 设置圆环
+    //
+    //     $('.circlechart').setChart($('.circlechart').data('percentage') + 1);        // 设置文字百分比
+    // }, 2000)
+    //
+
+    $("#Outermost").mousemove(function (e) {
+        if (e.which == 1) {
+            window.CallNativeSync('{"func":"WP_MouseMove"}');
+        }
+    }).mousedown(function () {
+        window.CallNativeSync('{"func":"WP_MouseDown"}');
+    }).mouseup(function () {
+        window.CallNativeSync('{"func":"WP_MouseUp"}');
+    });
+
+    var DSLan = window.CallNativeSync('{"func":"WP_GetLanguage"}');
+    // var DSLan = '{"value":"en"}';
+    var data_arr = $.parseJSON(DSLan);
+    var Languagevalue = (data_arr.value).toLowerCase();
+    SwitchLanguage((Languagevalue));
+
+    // var str = '{"background":"../images/DesktopSkin/Wallpaper/default.png","cpu":[{"clock":3675,"fans":0,"maxclock":3675,"maxpower":65,"power":23,"temperature":54,"usage":17}],"cpuswitch":1,"download":0,"gpu":[{"MemoryClock":1750,"MemorySize":4096,"MemoryUsage":"267M/4096M","MemoryUsed":267,"clock":1325,"fans":0,"maxclock":1325,"power":60,"shadres":2048,"temperature":58,"usage":0}],"gpumemswitch":1,"gpuswitch":1,"language":"CN","lock":0,"memoryload":46,"memoryswitch":1,"memorytotal":16336,"networkswitch":1,"titleswitch":0,"type":1,"upload":0}';
+    // var str = '{"background":"../images/DesktopSkin/Wallpaper/img_bg_style1.png","cpu":[{"clock":2693,"fans":0,"maxclock":2694,"maxpower":15,"power":12,"temperature":41,"usage":28}],"cpuswitch":1,"download":0,"gpu":[{"MemoryClock":1066,"MemorySize":0,"MemoryUsage":"111M/0M","MemoryUsed":110,"clock":300,"fans":0,"maxclock":300,"power":0,"shadres":954,"temperature":44,"usage":0},{"MemoryClock":324,"MemorySize":2048,"MemoryUsage":"26M/2048M","MemoryUsed":26,"clock":135,"fans":0,"maxclock":300,"power":0,"shadres":384,"temperature":31,"usage":0}],"gpumemswitch":1,"gpuswitch":1,"language":"CN","lock":0,"memoryload":43,"memoryswitch":1,"memorytotal":8092,"networkswitch":1,"titleswitch":0,"type":1,"upload":0}';
+    // DS_LoadConfig_Child(str);
+
+    function DS_LoadConfig_Child(str) {
+        // $('#OutermostI').val(str);
+        var data_arr = $.parseJSON(str);
+        $.each(data_arr, function (k, v) {
+            switch (k) {
+                case 'background':
+                    if ($('#background').val() != v) {
+                        ChangePreviewBackground(v);
+                    }
+                    $('#background').val(v);
+                    break;
+                case 'language':
+                    DataProcessLanguage(v);
+                    break;
+                case 'cpu':
+                    DataProcessCpu(v);
+                    break;
+                case 'gpu':
+                    DataProcessGpu(v);
+                    break;
+                case 'memoryload':
+                case 'memorytotal':
+                case 'upload':
+                case 'download':
+                    DataProcessOneArr(v, k);
+                    break;
+                case 'cpuswitch':
+                case 'gpuswitch':
+                case 'gpumemswitch':
+                case 'memoryswitch':
+                case 'networkswitch':
+                case 'titleswitch':
+                    StatusProcess(v, k);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+
+    /*主程序改变背景*/
+    function ChangePreviewBackground(value) {
+        if (value.indexOf('default') !== -1) {
+            $('.Desktop-Skin').css('background', 'rgba(41, 41, 41, 0.5)');
+            setTimeout(function () {
+                $('.desktop-cpu-g,.desktop-gpu-g,.desktop-pattern').css('visibility', 'visible');
+                $('.DesktopSkinLoad').remove();
+            }, 1000);
+            return;
+        } else if (value.indexOf('_style_') !== -1) {
+            UseSkin = value.replace('_style_', '_big_');
+        } else if (value.indexOf('_bg_style') !== -1) {
+            UseSkin = value.replace('_bg_style', '_bg_plan');
+        } else {
+            UseSkin = value;//浮窗模式壁纸
+        }
+        $('.Desktop-Skin').css('background', 'url("' + UseSkin + '")no-repeat');
+
+        setTimeout(function () {
+            $('.desktop-cpu-g,.desktop-gpu-g,.desktop-pattern').css('visibility', 'visible');
+            $('.DesktopSkinLoad').remove();
+        }, 1000);
+    }
+
+
+    function DataProcessLanguage(data) {
+        if ($('#language').val() != data) {
+            SwitchLanguage(((data).toLowerCase()));
+        }
+        $('#language').val(data);
+    }
+
+    function DataProcessCpu(data) {
+        if (data.length === 0 || data === []) {
+            $('.cpuswitch').remove();
+        } else {
+            $.each(data, function (k, v) {
+                $.each(v, function (m, n) {
+                    if (m === 'usage') {
+                        // $(".circleChart#1").circleChart({
+                        //     value: n
+                        // });
+                        $('.circlechart').data('percentage', n).setChart(n);// 动态设置圆环
+                    } else if (m === 'power') {
+                        if (CPUMaxPower === 0) {
+                            CPUMaxPower = n + 10;
+                        } else if (n > CPUMaxPower) {
+                            CPUMaxPower = n;
+                        }
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('cpu_' + m, toPercent(n, CPUMaxPower) + '%');
+                        });
+                        $('#cpu_' + m).text((n));
+                    } else if (m === 'temperature') {
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('cpu_' + m, n + '%');
+                        });
+                        $('#cpu_' + m).text((n));
+                    } else if (m === 'clock') {
+                        if (n !== 0 && n !== null) {
+                            layui.use('element', function () {
+                                var element = layui.element;
+                                element.progress('cpu_' + m, toPercent(n, (data[0]['maxclock'])) + '%');
+                            });
+                            $('#cpu_' + m).text((n));
+                        }
+                    }
+                });
+            })
+        }
+    }
+
+
+    function DataProcessGpu(data) {
+        if (data.length === 0 || data === []) {
+            $('.gpuswitch').remove();
+        } else if (data.length === 2) {
+            if (data[0]['shadres'] < data[1]['shadres']) {
+                StandGPULoca = 1;
+            } else {
+                StandGPULoca = 0;
+            }
+            if (data[1]['usage'] === 0 && data[0]['usage'] !== 0) {
+                StandGPULoca = 0;
+            }
+            $.each(data[StandGPULoca], function (m, n) {
+                if (m === 'usage') {
+                    if (n === 0) {
+                        usage = 1;
+                    } else {
+                        usage = n;
+                    }
+                    // $(".circleChart#2").circleChart({
+                    //     value: usage
+                    // });
+                    $('.circlechart2').data('percentage', usage).setChart(usage);// 动态设置圆环
+
+                } else if (m === 'power') {
+                    if (GPUMaxPower === 0) {
+                        GPUMaxPower = n + 10;
+                    } else if (n > GPUMaxPower) {
+                        GPUMaxPower = n;
+                    }
+                    layui.use('element', function () {
+                        var element = layui.element;
+                        element.progress('gpu_' + m, toPercent(n, GPUMaxPower) + '%');
+                    });
+                    $('#gpu_' + m).text((n));
+                } else if (m === 'temperature') {
+                    layui.use('element', function () {
+                        var element = layui.element;
+                        element.progress('gpu_' + m, n + '%');
+                    });
+                    $('#gpu_' + m).text((n));
+                } else if (m === 'clock') {
+                    if (n !== 0 && n !== null) {
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('gpu_' + m, toPercent(n, (data[0]['maxclock'])) + '%');
+                        });
+                        $('#gpu_' + m).text((n));
+                    }
+                } else if (m === 'MemoryUsage') {
+                    MemoryUse = parseFloat(((data[StandGPULoca].MemoryUsed) / 1024).toFixed(1));
+                    MemoryTotal = parseFloat(((data[StandGPULoca].MemorySize) / 1024).toFixed(1));
+                    if (MemoryUse == 0) {
+                        MemoryUse = 0.1;
+                    }
+                    layui.use('element', function () {
+                        var element = layui.element;
+                        element.progress('gpumemload', toPercent(MemoryUse, MemoryTotal) + '%');
+                    });
+
+                    $('#MemoryUsage1').html('<span>' + MemoryUse + 'G</span><span>/</span><span>' + MemoryTotal + 'G</span>');
+
+                }
+            });
+
+        } else {
+            $.each(data, function (k, v) {
+                $.each(v, function (m, n) {
+                    if (m === 'usage') {
+                        if (n === 0) {
+                            usage = 1;
+                        } else {
+                            usage = n;
+                        }
+                        // $(".circleChart#2").circleChart({
+                        //     value: usage
+                        // });
+                        $('.circlechart2').data('percentage', usage).setChart(usage);// 动态设置圆环
+
+                    } else if (m === 'power') {
+                        if (GPUMaxPower === 0) {
+                            GPUMaxPower = n + 10;
+                        } else if (n > GPUMaxPower) {
+                            GPUMaxPower = n;
+                        }
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('gpu_' + m, toPercent(n, GPUMaxPower) + '%');
+                        });
+                        $('#gpu_' + m).text((n));
+                    } else if (m === 'temperature') {
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('gpu_' + m, n + '%');
+                        });
+                        $('#gpu_' + m).text((n));
+                    } else if (m === 'clock') {
+                        if (n !== 0 && n !== null) {
+                            layui.use('element', function () {
+                                var element = layui.element;
+                                element.progress('gpu_' + m, toPercent(n, (data[0]['maxclock'])) + '%');
+                            });
+                            $('#gpu_' + m).text((n));
+                        }
+                    } else if (m === 'MemoryUsage') {
+                        MemoryUse = parseFloat(((v.MemoryUsed) / 1024).toFixed(1));
+                        MemoryTotal = parseFloat(((v.MemorySize) / 1024).toFixed(1));
+                        if (MemoryUse == 0) {
+                            MemoryUse = 0.1;
+                        }
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('gpumemload', toPercent(MemoryUse, MemoryTotal) + '%');
+                        });
+
+                        $('#MemoryUsage1').html('<span>' + MemoryUse + 'G</span><span>/</span><span>' + MemoryTotal + 'G</span>');
+
+                    }
+                });
+            });
+
+        }
+    }
+
+
+    function toPercent(num, total) {
+        return (Math.round(num / total * 10000) / 100.00);
+    }
+
+    function DataProcessOneArr(data, type) {
+        if (type === 'download' || type === 'upload') {
+            $('#' + type).text(bytesToSize(data) + '/s');
+        } else if (type === 'memoryload') {
+            memoryload = data;
+            layui.use('element', function () {
+                var element = layui.element;
+                element.progress('memoryload', data + '%');
+            });
+        } else if (type === 'memorytotal') {
+            var memoryloadM = (data * (memoryload / 100)).toFixed(2);
+            $('#memoryload1').text(Number(memoryloadM / 1024).toPrecision(2) + 'G');
+            MemoryTotal = Number(data / 1024).toPrecision(2);
+            $('#memorytotal1').text(MemoryTotal + 'G');
+        }
+    }
+
+    //格式化字节
+    function bytesToSize1(bytes) {
+        if (bytes === 0) return '0 B';
+        var k = 1024;
+        sizes = ['  KB', ' MB'];
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (Math.round((bytes / Math.pow(k, i)) * 100)) / 100 + sizes[i];
+    }
+
+    function bytesToSize(bytes) {
+        if (bytes === 0) return '0 KB';
+        var k = 1024, // or 1024
+            sizes = ['  KB', ' MB'];
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+    }
+
+
+    function StatusProcess(status, title) {
+        if (status == 1) {
+            $('.' + title).show();
+        } else {
+            $('.' + title).hide();
+        }
+    }
+
+    //主程序调用解锁锁定
+    function WP_SetLockState_Child(value) {
+        // var value = '{"lock":"0"}';
+        var data_arr = $.parseJSON(value);
+        if (data_arr.lock === 0) {
+            $('.dragLayer-locking').show();
+            // $('#titleswitch').hide().removeClass('titleswitch');
+            // $('#titleswitch1').hide().removeClass('titleswitch');
+        } else {
+            $('.dragLayer-locking').hide();
+            // $('#titleswitch').show().addClass('titleswitch');
+            // $('#titleswitch1').show().addClass('titleswitch');
+        }
+    }
+
+    function GPP_WinLock() {
+        $('.dragLayer-locking').hide();
+        window.CallNative('{"func":"WP_SetWindowPenetrate"}');
+    }
+
+
+</script>
+</html>

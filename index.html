@@ -5,8 +5,54 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>机械师控制中心</title>
   </head>
+  <!-- <style>
+    body{-webkit-user-select:none;}
+  </style> -->
   <body>
+    <script>
+      <!--
+      window.CallNativeAsync('SetWindowSize', 1080, 700, 100)
+      -->
+    </script>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+        <!-- built files will be auto injected -->
+    <script>
+      window.CallNativeSync('{"func":"GPP_ShowForm"}')
+    </script>
   </body>
+
 </html>
+<!-- <script>
+  function banBackSpace(e) {
+    var ev = e || window.event;
+    var obj = ev.target || ev.srcElement;
+    var t = obj.type || obj.getAttribute('type');
+    var vReadOnly = obj.getAttribute('readonly');
+    vReadOnly = (vReadOnly == "") ? false : vReadOnly;
+    var flag1 = (ev.keyCode == 8 && (t == "password" || t == "text" || t == "textarea") && vReadOnly == "readonly") ? true : false;
+    var flag2 = (ev.keyCode == 8 && t != "password" && t != "text" && t != "textarea") ? true : false;
+    if (flag2) {return false;}
+    if (flag1) {return false;}
+}
+//屏蔽返回功能
+window.onload = function () {
+    document.onkeydown = banBackSpace;
+};
+document.oncontextmenu = function() {
+    return false;
+};
+$('body').mousedown(function (e) {
+    if (e.button === 1) {
+        return false;
+    }
+});
+//屏蔽选中功能
+document.onselectstart = function () {
+    document.onmouseup = function(event){
+        if(event.target.tagName!="INPUT"){
+            return false;
+        }
+    }
+};
+
+</script> -->

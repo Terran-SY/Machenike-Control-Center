@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <base target="_blank">
+    <meta charset="UTF-8">
+    <title>GPPInGame</title>
+    <link rel="stylesheet" href="./css/reset.css"/>
+    <link rel="stylesheet" href="./css/master.css"/>
+    <style>
+        body {
+            background-color: transparent
+        }
+
+        body::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .Desktop-cpu, .Desktop-gpu {
+            width: 134px
+        }
+
+        .Desktop-mem, .Desktop-ram {
+            width: 170px;
+        }
+
+        .Desktop-Notwork {
+            width: 195px
+        }
+    </style>
+</head>
+<body>
+<div id="ContainerOut" class="Desktop arrows">
+    <div id="cpuswitch" class="Desktop-all Desktop-cpu">
+        <div class="Desktop-all-left">
+            <img src="./images/img_desktop_cpu_a.png" alt=""/>
+        </div>
+        <div class="Desktop-all-right">
+            <p id="test2">CPU</p>
+            <span class="span-first"><em id="CPU_usage"></em><em>%</em></span>
+            <span><em id="CPU_temperature"></em><em>℃</em></span>
+        </div>
+    </div>
+    <div id="gpuswitch" class="Desktop-all Desktop-gpu">
+        <div class="Desktop-all-left">
+            <img src="./images/img_desktop_gpu_a.png" alt=""/>
+        </div>
+        <div class="Desktop-all-right">
+            <p id="test3" set-lan="text:gpu"></p>
+            <span class="span-first"><em id="GPU_usage"></em><em>%</em></span>
+            <span><em id="GPU_temperature"></em><em>℃</em></span>
+        </div>
+    </div>
+    <div id="memoryswitch" class="Desktop-all Desktop-mem">
+        <div class="Desktop-all-left">
+            <img src="./images/img_desktop_mem_a.png" alt=""/>
+        </div>
+        <div class="Desktop-all-right">
+            <p set-lan="text:memory"></p>
+            <span class="span-first"><em id="memoryload"></em><em>%</em></span>
+            <span id="memoryload1"></span><span style="margin-left: 2px;margin-right: 2px;">/</span><span id="memorytota2"></span>
+        </div>
+    </div>
+    <div id="gpumemswitch" class="Desktop-all Desktop-ram">
+        <div class="Desktop-all-left">
+            <img src="./images/img_desktop_ram_a.png" alt=""/>
+        </div>
+        <div class="Desktop-all-right">
+            <p set-lan="text:gpuram"></p>
+            <span class="span-first"><em id="RAMToPercent"></em><em>%</em></span>
+            <!--            <span>7.5G</span><span style="margin-left: 2px;margin-right: 2px;">/</span><span>16G</span>-->
+            <span id="MemoryUsage"></span>
+        </div>
+    </div>
+    <div id="networkswitch" class="Desktop-all Desktop-Notwork">
+        <div class="Desktop-all-left">
+            <img src="./images/img_desktop_notwork_a.png" alt=""/>
+        </div>
+        <div class="Desktop-all-right">
+            <p set-lan="text:Network"></p>
+            <div id="outside_20" class="Occupy-title-d" style="margin-right: 10px;">
+                <span class="ColText" id="download"></span>
+                <img src="./images/img_desktop_down_a.png" class="down-up skin_icon" alt=""/>
+            </div>
+            <div id="outside_21" class="Occupy-title-d">
+                <span class="ColText" id="upload"></span>
+                <img src="./images/img_desktop_up_a.png" class="down-up skin_icon" alt=""/>
+            </div>
+
+        </div>
+    </div>
+</div>
+<input id="language" value="" type="hidden" name="">
+</body>
+<script src="./js/jquery-1.11.1.js"></script>
+<script src="./js/language.js"></script>
+<script src="./js/language_cn.js" charset="utf-8"></script>
+<script src="./js/language_en.js" charset="utf-8"></script>
+<script>
+
+    // var str = '{"background":"../images/DesktopSkin/Wallpaper/img_bg_style16.png","cpu":[{"clock":3650,"fans":0,"power":30,"temperature":49,"usage":31}],"cpuswitch":1,"download":2,"gpu":[{"MemoryClock":1750,"MemorySize":4096,"MemoryUsage":"492M/4096M","MemoryUsed":492,"clock":321,"fans":0,"power":0,"shadres":2048,"temperature":52,"usage":100}],"gpumemswitch":1,"gpuswitch":1,"language":"CN","lock":0,"memoryload":45,"memoryswitch":1,"memorytotal":16336,"networkswitch":1,"titleswitch":0,"type":1,"upload":4}';
+    // var str = '{"background":"../images/DesktopSkin/Wallpaper/img_bg_style1.png","cpu":[{"clock":2693,"fans":0,"maxclock":2694,"maxpower":15,"power":12,"temperature":41,"usage":28}],"cpuswitch":1,"download":101376,"gpu":[{"MemoryClock":1066,"MemorySize":0,"MemoryUsage":"111M/0M","MemoryUsed":110,"clock":300,"fans":0,"maxclock":300,"power":0,"shadres":54,"temperature":44,"usage":0},{"MemoryClock":324,"MemorySize":2048,"MemoryUsage":"26M/2048M","MemoryUsed":26,"clock":135,"fans":0,"maxclock":300,"power":0,"shadres":384,"temperature":31,"usage":0}],"gpumemswitch":1,"gpuswitch":1,"language":"CN","lock":0,"memoryload":43,"memoryswitch":1,"memorytotal":8092,"networkswitch":1,"titleswitch":0,"type":1,"upload":1023}';
+    // DS_LoadConfig_Child(str);
+
+    function DS_LoadConfig_Child(str) {
+        // $('#OutermostI').val(str);
+        var data_arr = $.parseJSON(str);
+        console.log(data_arr);
+        $.each(data_arr, function (k, v) {
+            switch (k) {
+                case 'language':
+                    DataProcessLanguage(v);
+                    break;
+                case 'cpu':
+                    DataProcessCpu(v);
+                    break;
+                case 'gpu':
+                    DataProcessGpu(v);
+                    break;
+                case 'memoryload':
+                case 'memorytotal':
+                case 'upload':
+                case 'download':
+                    DataProcessOneArr(v, k);
+                    break;
+                case 'cpuswitch':
+                case 'gpuswitch':
+                case 'gpumemswitch':
+                case 'memoryswitch':
+                case 'networkswitch':
+                case 'titleswitch':
+                    StatusProcess(v, k);
+                    break;
+                default:
+                    break;
+            }
+        });
+
+    }
+
+    function DataProcessLanguage(data) {
+        if ($('#language').val() != data) {
+            SwitchLanguage(((data).toLowerCase()));
+        }
+        $('#language').val(data);
+        $('#ContainerOut').show();
+    }
+
+    function DataProcessCpu(data) {
+        if (data.length === 0 || data === []) {
+            $('.cpuswitch').remove();
+        } else {
+            $.each(data, function (k, v) {
+                $.each(v, function (m, n) {
+                    if (m === 'temperature' || m === 'usage') {
+                        $('#CPU_' + m).text((n));
+                    }
+                });
+            })
+        }
+    }
+
+    function DataProcessGpu(data) {
+        if (data.length === 0 || data === []) {
+            $('.gpuswitch').remove();
+        } else if (data.length === 2) {
+            if (data[0]['shadres'] < data[1]['shadres']) {
+                StandGPULoca = 1;
+            } else {
+                StandGPULoca = 0;
+            }
+            if (data[1]['usage'] === 0 && data[0]['usage'] !== 0) {
+                StandGPULoca = 0;
+            }
+            $.each(data[StandGPULoca], function (m, n) {
+                if (m === 'temperature' || m === 'usage') {
+                    $('#GPU_' + m).text((n));
+                } else if (m === 'MemoryUsage') {
+                    MemoryUse = parseFloat(((data[StandGPULoca].MemoryUsed) / 1024).toFixed(1));
+                    MemoryTotal = parseFloat(((data[StandGPULoca].MemorySize) / 1024).toFixed(1));
+                    if (MemoryUse == 0) {
+                        MemoryUse = 0.1;
+                    }
+                    $('#RAMToPercent').text((toPercent(MemoryUse, MemoryTotal)).toFixed(0));
+                    $('#MemoryUsage').html('<span>' + MemoryUse + 'G</span><span style="margin-left: 4px;margin-right: 4px;">/</span><span>' + MemoryTotal + 'G</span>');
+                }
+
+            });
+        } else {
+            $.each(data, function (k, v) {
+                $.each(v, function (m, n) {
+                    if (m === 'temperature' || m === 'usage') {
+                        $('#GPU_' + m).text((n));
+                    } else if (m === 'MemoryUsage') {
+                        MemoryUse = parseFloat(((v.MemoryUsed) / 1024).toFixed(1));
+                        MemoryTotal = parseFloat(((v.MemorySize) / 1024).toFixed(1));
+                        if (MemoryUse == 0) {
+                            MemoryUse = 0.1;
+                        }
+                        $('#RAMToPercent').text((toPercent(MemoryUse, MemoryTotal)).toFixed(0));
+                        $('#MemoryUsage').html('<span>' + MemoryUse + 'G</span><span style="margin-left: 4px;margin-right: 4px;">/</span><span>' + MemoryTotal + 'G</span>');
+                    }
+
+                });
+            });
+
+        }
+    }
+
+
+    function toPercent(num, total) {
+        return (Math.round(num / total * 10000) / 100.00);
+    }
+
+    function DataProcessOneArr(data, type) {
+        if (type === 'download' || type === 'upload') {
+            $('#' + type).text(bytesToSize(data) + '/s');
+        } else if (type === 'memoryload') {
+            memoryload = data;
+            $('#memoryload').text(data);
+        } else if (type === 'memorytotal') {
+            var memoryloadM = (data * (memoryload / 100)).toFixed(2);
+            $('#memoryload1').text(Number(memoryloadM / 1024).toPrecision(2) + 'G');
+            MemoryTotal = Number(data / 1024).toPrecision(2);
+            $('#memorytota2').text(MemoryTotal + 'G');
+        }
+    }
+
+    function StatusProcess(status, title) {
+        if (status == 1) {
+            $('#' + title).show();
+        } else {
+            $('#' + title).hide();
+        }
+    }
+
+
+    //格式化字节
+    function bytesToSize(bytes) {
+        // if (bytes >= 10240) {
+        //     point = 1;
+        // } else {
+        //     point = 10;
+        // }
+        if (bytes >= 101376) {
+            return '99 MB'
+        } else if (bytes === 0) return '0 B';
+        var k = 1024;
+        sizes = ['KB', 'MB'];
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (Math.round((bytes / Math.pow(k, i)) * 10)) / 10 + sizes[i];
+    }
+
+
+    $("#ContainerOut").mousemove(function (e) {
+        if (e.which == 1) {
+            window.CallNativeSync('{"func":"WP_MouseMove"}');
+        }
+    }).mousedown(function () {
+        window.CallNativeSync('{"func":"WP_MouseDown"}');
+    }).mouseup(function () {
+        window.CallNativeSync('{"func":"WP_MouseUp"}');
+    });
+
+</script>
+</html>

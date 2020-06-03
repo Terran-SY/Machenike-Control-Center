@@ -2,7 +2,7 @@
   <div class="sideBar">
     <img class="sideBg" src="/static/img/sideBg.png" />
     <ul class="sideBox">
-      <li class="loginCon" @click="">
+      <li class="loginCon" @click="test">
         <img class="loginIcon" src="~@/assets/img/sidebar/loginicon.png" />
         <div class="loginTit">
           <span class="loginCN">登&nbsp;&nbsp;录</span>
@@ -50,13 +50,13 @@ export default {
           name: "硬件监控",
           icon: sideIcon1,
           activeIcon: sideIcon1a,
-          routeName: "SideHardware"
+          routeName: "Side1Hardware"
         },
         {
           name: "游戏加速",
           icon: sideIcon2,
           activeIcon: sideIcon2a,
-          routeName: "SideGame"
+          routeName: "Side2Optimization"
         },
         {
           name: "灯光控制",
@@ -68,13 +68,13 @@ export default {
           name: "官方驱动",
           icon: sideIcon4,
           activeIcon: sideIcon4a,
-          routeName: "SideDriver"
+          routeName: "Side4Driver"
         },
         {
           name: "硬核软件",
           icon: sideIcon5,
           activeIcon: sideIcon5a,
-          routeName: "SideHardcore"
+          routeName: "side5Hardcore"
         },
         {
           name: "机友聚集地",
@@ -94,6 +94,9 @@ export default {
     }
   },
   methods: {
+    test() {
+      this.$router.push({ name: "side2Game"})
+    },
     itemClick(index, item) {
       var activeIndex = sessionStorage.getItem("activeIndex");
       if (index != activeIndex) {
@@ -101,8 +104,7 @@ export default {
         sessionStorage.setItem("activeIndex", index);
         if (item.routeName) this.$router.push({ name: item.routeName });
       }
-    },
-    
+    }
   }
 };
 </script>
